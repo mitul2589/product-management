@@ -1,0 +1,14 @@
+thead {
+    color: #337AB7;
+}
+
+.toolbar {
+    float: right;
+    width: auto;
+}
+
+.modal-content {
+          width: 50% !important;
+          margin: 0 aut0;
+        }
+

@@ -1,0 +1,80 @@
+<span defaultOverlayTarget></span>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        {{pageTitle}}
+        <div class="container toolbar">
+            <button type="button" class="btn btn-default" (click)='openProductEditor()'>Add</button>
+            <button type="button" class="btn btn-default" (click)='editProduct()'>Edit</button>
+            <button type="button" class="btn btn-default" (click)='deleteProduct()'>Delete</button>
+        </div>
+    </div>
+
+    <div [ngSwitch]="testNgSwitch">
+        <div *ngSwitchCase="'1'">Displayed 1 as per ngswitch condition</div>
+        <div *ngSwitchCase="'2'">Displayed 2 as per ngswitch condition</div>
+    </div>
+
+    
+    <!-- Filter the Products   -->
+    <div class='panel-body'>
+        <div class='row'>
+            <div class='col-md-2'>Filter by:</div>
+            <div class='col-md-4'>
+                <input type='text' [(ngModel)]='listFilter' />
+            </div>
+        </div>
+        <div class='row' *ngIf='listFilter'>
+            <div class='col-md-6'>
+                <h3>Filtered by: {{listFilter}} </h3>
+            </div>
+        </div>
+
+        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+
+
+        <div *ngIf='products && products.length === 0'><br/><br/>No Products Found...!!!</div>
+
+        
+
+        <div class='table-responsive'>
+            <table class='table' *ngIf='products && products.length'>
+                <thead>
+                    <tr>
+                        <th>
+                            <button class='btn btn-primary' (click)='toggleImage()'>
+                                {{showImage ? 'Hide' : 'Show'}} Image
+                            </button>
+                        </th>
+                        <th>Product</th>
+                        <th>Code</th>
+                        <th>Available</th>
+                        <th>Price</th>
+                        <th>5 Star Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let product of products | productFilter:listFilter; let i = index; trackBy: trackByProducts' (click)='selectRow(i)'
+                        [class.active]='i === selectedRow'>
+                        <td>
+                            <img *ngIf='showImage' [src]='product.imageUrl' [title]='product.productName | uppercase' [style.width.px]='imageWidth' [style.margin.px]='imageMargin'>
+                        </td>
+                        <td><a [routerLink]="['/product', product._id]">
+                            {{product.productName}}
+                            </a>
+                        </td>
+                        <td>{{ product.productCode | lowercase }}</td>
+                        <td>{{ product.releaseDate | date: 'MM/dd/yyyy' }}</td>
+                        <td>{{ product.price | currency:'USD':true:'1.2-2' }}</td>
+                        <td>
+                            <ai-star #starComp [rating]='product.starRating' (ratingClicked)='onRatingClicked($event)'>
+                               <div aftercontent>zsczvzv</div>
+                            </ai-star>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
