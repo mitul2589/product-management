@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -13,6 +13,8 @@ import { IProduct } from './product';
 export class ProductService {
     private _productUrl = 'api/products';
 
+    @Output() products: IProduct[];
+
     list1Event: EventEmitter<any> = new EventEmitter();
 
     constructor(private _http: Http) { }
@@ -20,7 +22,7 @@ export class ProductService {
     getProducts(): Observable<IProduct[]> {
         return this._http.get(this._productUrl)
             .map((response: Response) => <IProduct[]> response.json())
-            .do(data => console.log('All: ' +  JSON.stringify(data)))
+            .do(data => this.products = data)
             .catch(this.handleError);
     }
 
@@ -45,7 +47,7 @@ export class ProductService {
     }
 
     deleteProduct(product: IProduct): Observable<void> {
-        return this._http.delete(this._productUrl + '/' + product._id, product)
+        return this._http.delete(this._productUrl + '/' + product._id)
                .map((response: Response) => {});
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, ViewContainerRef, ViewEncapsulation, Input, Injectable, Output, DoCheck }  from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ViewContainerRef, ViewEncapsulation, Input, Injectable, Output, DoCheck } from '@angular/core';
 import { Modal, BSModalContext } from 'angular2-modal/plugins/bootstrap';
 
 import { Overlay, overlayConfigFactory } from 'angular2-modal';
@@ -8,14 +8,14 @@ import { AdditionCalculateWindow, AdditionCalculateWindowData } from './custom-m
 import { IProduct } from './product';
 import { ProductService } from './product.service';
 
-import {NgForm} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 //import {PaginatePipe, PaginationService} from 'ng2-pagination';
 
 @Component({
     templateUrl: 'product-list.component.html',
     styleUrls: ['product-list.component.css'],
-    
+
 })
 
 @Injectable()
@@ -34,22 +34,19 @@ export class ProductListComponent implements OnInit, DoCheck {
 
     constructor(private _productService: ProductService, vcRef: ViewContainerRef, public modal: Modal) {
         //modal.
+
     }
 
-    
     toggleImage(): void {
         this.showImage = !this.showImage;
     }
 
     ngOnInit(): void {
         this._productService.getProducts()
-                .subscribe(products => this.products = products,
-                           error => this.errorMessage = <any>error);
+            .subscribe(products => this.products = products,
+            error => this.errorMessage = <any>error);
     }
 
-    
-
-    
     ngDoCheck(): void {
         //console.log("12345");
     }
@@ -60,7 +57,7 @@ export class ProductListComponent implements OnInit, DoCheck {
 
     selectRow(index: number): void {
         this.selectedRow = index;
-       
+
     }
 
     openProductEditor(): void {
@@ -82,12 +79,12 @@ export class ProductListComponent implements OnInit, DoCheck {
     deleteProduct(): void {
         console.log(this.products[this.selectedRow]);
         this._productService.deleteProduct(this.products[this.selectedRow])
-                .subscribe(products => { location.reload(); },
-                           error => this.errorMessage = <any>error);
-        
+            .subscribe(products => { location.reload(); },
+            error => this.errorMessage = <any>error);
+
     }
 
     trackByProducts(index: number, product: IProduct) {
-       return product._id;
+        return product._id;
     }
 }

@@ -116,6 +116,7 @@ export class AdditionCalculateWindow implements ModalComponent<AdditionCalculate
     constructor(private _productService: ProductService, public dialog: DialogRef<AdditionCalculateWindowData>) {
         this.context = dialog.context;
         this._productService.list1Event.subscribe((data: any) => {
+            delete data.__v;
             this.loginForm.setValue(data);
             console.log(data);
         });
@@ -147,12 +148,20 @@ export class AdditionCalculateWindow implements ModalComponent<AdditionCalculate
         console.log(this.loginForm.value._id);
         if (this.loginForm.value['_id']) {
             this._productService.editProduct(this.loginForm.value)
-                .subscribe(products => { this.dialog.close(); location.reload(); },
+                .subscribe(product => {
+                    this.dialog.close();
+                    //location.reload(); 
+                    console.log("updated product --->" + product.productName);
+                    this._productService.products.filter(p => p._id === product._id)[0] = product;
+                },
                 error => this.errorMessage = <any>error);
         } else {
             delete this.loginForm.value["_id"];
             this._productService.addProduct(this.loginForm.value)
-                .subscribe(products => { this.dialog.close(); location.reload(); },
+                .subscribe(product => {
+                    this.dialog.close();
+                    this._productService.products.push(product);
+                },
                 error => this.errorMessage = <any>error);
         }
     }
